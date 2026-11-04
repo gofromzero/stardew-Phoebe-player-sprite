@@ -17,8 +17,12 @@ internal static class FrameGeometry
         return ((Cell - w) / 2, Cell - h, w, h);
     }
 
+    public static string NormalizeVariant(string variant) =>
+        string.Equals(variant, "classic", StringComparison.OrdinalIgnoreCase)
+        || string.Equals(variant, "dumpling", StringComparison.OrdinalIgnoreCase) ? "classic" : "are";
+
     public static (bool Enabled, string Variant) NextAppearance(bool enabled, string variant) =>
-        !enabled ? (true, "are") : variant == "are" ? (true, "dumpling") : (false, "dumpling");
+        !enabled ? (true, "are") : variant == "are" ? (true, "classic") : (false, "classic");
 
     public static int Height(string sheet, int row, int col)
     {

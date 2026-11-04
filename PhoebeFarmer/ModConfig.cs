@@ -13,7 +13,7 @@ public sealed class ModConfig
 
     public void Normalize()
     {
-        Variant = string.Equals(Variant, "dumpling", StringComparison.OrdinalIgnoreCase) ? "dumpling" : "are";
+        Variant = FrameGeometry.NormalizeVariant(Variant);
         WalkFrameMs = Math.Clamp(WalkFrameMs, 60, 1000);
     }
 }

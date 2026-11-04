@@ -16,9 +16,9 @@ foreach (int h in new[] { 1, 20, 50, 1000 })
 }
 var state = (Enabled: true, Variant: "are");
 state = FrameGeometry.NextAppearance(state.Enabled, state.Variant);
-Check(state == (true, "dumpling"), "Outfit 1 advances to outfit 2");
+Check(state == (true, "classic"), "Outfit 1 advances to outfit 2");
 state = FrameGeometry.NextAppearance(state.Enabled, state.Variant);
-Check(state == (false, "dumpling"), "Outfit 2 advances to off");
+Check(state == (false, "classic"), "Outfit 2 advances to off");
 state = FrameGeometry.NextAppearance(state.Enabled, state.Variant);
 Check(state == (true, "are"), "Off returns to outfit 1");
 Check(FrameGeometry.NextAppearance(false, "are") == (true, "are"), "Legacy disabled config starts at outfit 1");
@@ -42,3 +42,7 @@ var tallStep = FrameGeometry.Fit(200, 300, 28, 240, 300);
 Check(smallStep.Width == tallStep.Width, "Walking must preserve width when only frame height changes");
 Check(smallStep.Height < tallStep.Height, "Shorter walk frame must not be stretched to full height");
 Check(smallStep.Y + smallStep.Height == 40 && tallStep.Y + tallStep.Height == 40, "Shared scale keeps feet anchored");
+
+Check(FrameGeometry.NormalizeVariant("dumpling") == "classic", "Existing outfit 2 configs migrate to classic");
+Check(FrameGeometry.NormalizeVariant("CLASSIC") == "classic", "Classic config is case insensitive");
+Check(FrameGeometry.NormalizeVariant("unknown") == "are", "Unknown config falls back to outfit 1");

@@ -1,15 +1,15 @@
 # 菲比双形态玩家模组 · Phoebe Farmer
 
-将《星露谷物语》的玩家外观替换为菲比，并在 **03 ARE 款**与 **01 团团款**之间切换。
+将《星露谷物语》的玩家外观替换为菲比，并在 **03 ARE 款**与 **06 经典款**之间切换。
 基于 [Darian 的 Whale Farmer](https://github.com/Darianliu23/stardew-deepseek-whale-maid-player-sprite) 改造。
 
-**0.1.3 是待实机验收的预发布版本。** 使用公开参考程序集编译；开发机器没有安装游戏。
+**0.1.4 是待实机验收的预发布版本。** 使用公开参考程序集编译；开发机器没有安装游戏。
 编译通过不代表已验证实际游戏中的动画、工具对位或模组兼容性。
 
 ## 安装
 
 1. 准备 PC 版 Stardew Valley **1.6.15** 和 **SMAPI 4.4.0 或更新版本**。
-2. 从本仓库 Releases 下载 `PhoebeFarmer-0.1.3.zip`。
+2. 从本仓库 Releases 下载 `PhoebeFarmer-0.1.4.zip`。
 3. 将 ZIP 内的 `PhoebeFarmer` 文件夹解压到游戏的 `Mods` 目录。
    路径应为 `Mods/PhoebeFarmer/manifest.json`，不要再多套一层文件夹。
 4. 通过 SMAPI 启动游戏，进入存档后使用快捷键。
@@ -19,7 +19,7 @@
 
 ## 切换
 
-- **F9**（沿用原模组开关键）：套装 1 ARE → 套装 2 团团 → 关闭（原版农夫）→ 套装 1。
+- **F9**（沿用原模组开关键）：套装 1 ARE → 套装 2 经典 → 关闭（原版农夫）→ 套装 1。
 - 不再使用 F8；默认启动为套装 1。
 - 选择写入 `config.json`，下次启动保留。打开菜单、对话或过场时不响应快捷键。
 
@@ -35,7 +35,7 @@
 }
 ```
 
-`Variant` 可填 `are` 或 `dumpling`。通过 `ToggleKey` 改键后重启游戏。旧版 `SwitchKey` 配置会被忽略；原有 `ToggleKey` 自定义键位继续生效。
+`Variant` 可填 `are` 或 `classic`。旧版 `dumpling` 自动迁移为经典款，已有 F9 自定义键位保留。通过 `ToggleKey` 改键后重启游戏。旧版 `SwitchKey` 配置会被忽略；原有 `ToggleKey` 自定义键位继续生效。
 只在本机显示替换；默认只替换自己的角色，联机其他人需要自行安装才能看到。
 
 ## 两款预览
@@ -45,8 +45,8 @@
 ### 03 ARE 款
 ![ARE pixel preview](art/previews/03-are-native-preview.jpg)
 
-### 01 团团款
-![Dumpling pixel preview](art/previews/01-dumpling-native-preview.jpg)
+### 06 经典款
+![Classic pixel preview](art/previews/06-classic-native-preview.jpg)
 
 ## 动作与限制
 
@@ -74,7 +74,7 @@
 ./build.ps1
 ```
 
-脚本获取公开的编译专用参考程序集，运行无图形环境的几何/切换检查，编译并输出 `dist/PhoebeFarmer-0.1.3.zip`。
+脚本获取公开的编译专用参考程序集，运行无图形环境的几何/切换检查，编译并输出 `dist/PhoebeFarmer-0.1.4.zip`。
 参考程序集仅用于编译，不可用于运行游戏，也不会打入安装包。
 已有游戏和 SMAPI 时可指定：
 

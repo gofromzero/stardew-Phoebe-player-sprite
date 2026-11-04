@@ -6,7 +6,8 @@
   Original MIT notice retained in LICENSE. Original whale artwork is not included.
 - Phoebe is a character from **Wuthering Waves / 鸣潮**, owned by KURO GAMES.
 - The two fan designs were selected by the user from concepts inspired by the
-  **ARE** and **团团团团转** appearances shown in their Wuwa Tappo screenshot.
+  **ARE** and **6 · 经典** appearances shown in their Wuwa Tappo screenshot.
+  Version 0.1.4 replaces the former 团团 outfit with the classic thumbnail selected by the user.
   The ARE label identifies the selected visual direction, not authorship of these generated images.
   These files are not original ARE artwork, official Tappo assets, or an endorsed collaboration.
 - Sprite sheets and previews were generated with OpenAI image generation and

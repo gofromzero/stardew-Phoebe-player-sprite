@@ -37,7 +37,7 @@ parser.add_argument("--write-layout", action="store_true")
 parser.add_argument("--partial", action="store_true")
 args = parser.parse_args()
 total = 0
-for variant in ("are", "dumpling"):
+for variant in ("are", "classic"):
     folder = ROOT / "PhoebeFarmer" / "assets" / variant
     atlas = {}
     for name, (cols, rows) in LAYOUTS.items():

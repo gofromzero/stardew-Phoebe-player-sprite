@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 Set-Location $PSScriptRoot
 
 $frameCounts = @{ walk=16; tools=12; melee=12; crouch=12; fishing=9; eat=6; misc=8 }
-foreach ($variant in @('are','dumpling')) {
+foreach ($variant in @('are','classic')) {
     $layout = Get-Content "PhoebeFarmer/assets/$variant/frames.json" -Raw | ConvertFrom-Json
     foreach ($sheet in $frameCounts.Keys) {
         if (-not (Test-Path "PhoebeFarmer/assets/$variant/$sheet.png") -or $layout.$sheet.Count -ne $frameCounts[$sheet]) {
@@ -26,13 +26,14 @@ if ($LASTEXITCODE -ne 0) { throw 'Geometry checks failed.' }
 dotnet build PhoebeFarmer/PhoebeFarmer.csproj -c Release "-p:GamePath=$GamePath" --nologo
 if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }
 
-$package = Join-Path $PSScriptRoot 'dist/PhoebeFarmer'
+$version = (Get-Content 'PhoebeFarmer/manifest.json' -Raw | ConvertFrom-Json).Version
+$package = Join-Path $PSScriptRoot "dist/package-$version/PhoebeFarmer"
 New-Item -ItemType Directory -Force $package | Out-Null
 Copy-Item 'PhoebeFarmer/bin/Release/net6.0/PhoebeFarmer.dll' $package
 Copy-Item 'PhoebeFarmer/manifest.json','PhoebeFarmer/config.json','README.md','LICENSE','CREDITS.md' $package
 Copy-Item 'PhoebeFarmer/assets' $package -Recurse -Force
 New-Item -ItemType Directory -Force (Join-Path $package 'art/previews') | Out-Null
-Copy-Item 'art/previews/*.jpg' (Join-Path $package 'art/previews')
+Copy-Item 'art/previews/03-are-native-preview.jpg','art/previews/06-classic-native-preview.jpg' (Join-Path $package 'art/previews')
 $version = (Get-Content 'PhoebeFarmer/manifest.json' -Raw | ConvertFrom-Json).Version
 $archive = Join-Path $PSScriptRoot "dist/PhoebeFarmer-$version.zip"
 Compress-Archive -LiteralPath $package -DestinationPath $archive -Force

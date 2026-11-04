@@ -35,7 +35,7 @@ namespace PhoebeFarmer
             config = helper.ReadConfig<ModConfig>();
             config.Normalize();
 
-            foreach (string variant in new[] { "are", "dumpling" })
+            foreach (string variant in new[] { "are", "classic" })
             {
                 var loaded = new Dictionary<Sheet, Texture2D>();
                 Dictionary<string, int[][]> bounds;
@@ -67,7 +67,7 @@ namespace PhoebeFarmer
                 return;
             }
             if (!variants.ContainsKey(config.Variant))
-                config.Variant = variants.ContainsKey("are") ? "are" : "dumpling";
+                config.Variant = variants.ContainsKey("are") ? "are" : "classic";
 
             var harmony = new Harmony(ModManifest.UniqueID);
             // 只拦截最底层的那个 draw 重载：其他重载最终都会调用它
@@ -127,7 +127,7 @@ namespace PhoebeFarmer
             config.Variant = next.Variant;
             try { Helper.WriteConfig(config); }
             catch (Exception ex) { Monitor.Log("本次切换已生效，但配置保存失败：" + ex.Message, LogLevel.Warn); }
-            string label = config.Variant == "are" ? "套装 1 · ARE" : "套装 2 · 团团";
+            string label = config.Variant == "are" ? "套装 1 · ARE" : "套装 2 · 经典";
             Game1.addHUDMessage(new HUDMessage(config.Enabled ? "菲比外观：" + label : "已恢复原版外观", HUDMessage.newQuest_type));
         }
 
