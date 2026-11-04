@@ -63,3 +63,8 @@ uint cobalt = 0xFFD55531;
 Check(PixelSampler.Sample(new[]{cobalt},1,0,0,1,1,true)==cobalt,"Official cobalt accents remain blue");
 uint pearlWhite = 0xFFF7F0F1;
 Check(PixelSampler.Sample(new[]{pearlWhite},1,0,0,1,1,true)==pearlWhite,"Official cool whites must not become beige");
+
+uint darkIris = 0xFF6F354D;
+Check(PixelSampler.Sample(new[]{darkIris},1,0,0,1,1,true)==darkIris,"Dark violet pupils must not map to navy blue");
+uint iris = 0xFFA05076;
+Check(PixelSampler.Sample(new[]{iris},1,0,0,1,1,true)==iris,"Violet iris shading is preserved");

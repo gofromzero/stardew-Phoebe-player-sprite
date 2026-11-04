@@ -1,0 +1,7 @@
+# Classic walking eyes, 0.1.6
+
+Built-in OpenAI image generation edited `PhoebeFarmer/assets/classic/walk.png`. The standing/walking front and side eyes now use compact violet clusters, dark upper lashes and light highlights. Other action artwork was not redrawn. Runtime and browser palettes add two dark violet shades so the iris does not collapse to navy blue.
+
+Prompt:
+
+Edit this exact 4x4 sprite sheet. Change ONLY eyes of the character in front and side views; preserve canvas, all 16 positions, head/body proportions, every pose, official color palette, hat hair clothing and transparent background. It will be reduced to only 32 pixels tall: eyes must be deliberate readable low-resolution pixel clusters, not large blank lavender rectangles. Front face: two separated compact eyes, each approximately 2 logical pixels wide and 3 high (at final 32px character height), charcoal upper lash, dark violet pupil, saturated violet lower iris, one crisp off-white highlight large enough to survive downsampling. Leave 2-3 logical skin pixels between eyes, keep skin below eyes and avoid the bangs covering upper lashes. Gentle lively Phoebe expression, not startled, no giant eyes, no glasses, no eyebrows merged into hair, no purple cheek blocks. Side eyes equally compact, with one dark lash and visible iris/highlight. Keep each direction's eye placement exactly consistent across its 4 walk frames. Hard pixel edges, flat clusters, no antialias blur or gradients. Back row unchanged. This is surgical eye correction not a redesign.

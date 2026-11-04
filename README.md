@@ -3,13 +3,13 @@
 将《星露谷物语》的玩家外观替换为菲比，并在 **03 ARE 款**与 **06 经典款**之间切换。
 基于 [Darian 的 Whale Farmer](https://github.com/Darianliu23/stardew-deepseek-whale-maid-player-sprite) 改造。
 
-**0.1.5 是待实机验收的预发布版本。** 使用公开参考程序集编译；开发机器没有安装游戏。
+**0.1.6 是待实机验收的预发布版本。** 使用公开参考程序集编译；开发机器没有安装游戏。
 编译通过不代表已验证实际游戏中的动画、工具对位或模组兼容性。
 
 ## 安装
 
 1. 准备 PC 版 Stardew Valley **1.6.15** 和 **SMAPI 4.4.0 或更新版本**。
-2. 从本仓库 Releases 下载 `PhoebeFarmer-0.1.5.zip`。
+2. 从本仓库 Releases 下载 `PhoebeFarmer-0.1.6.zip`。
 3. 将 ZIP 内的 `PhoebeFarmer` 文件夹解压到游戏的 `Mods` 目录。
    路径应为 `Mods/PhoebeFarmer/manifest.json`，不要再多套一层文件夹。
 4. 通过 SMAPI 启动游戏，进入存档后使用快捷键。
@@ -77,7 +77,7 @@
 ./build.ps1
 ```
 
-脚本获取公开的编译专用参考程序集，运行无图形环境的几何/切换检查，编译并输出 `dist/PhoebeFarmer-0.1.5.zip`。
+脚本获取公开的编译专用参考程序集，运行无图形环境的几何/切换检查，编译并输出 `dist/PhoebeFarmer-0.1.6.zip`。
 参考程序集仅用于编译，不可用于运行游戏，也不会打入安装包。
 已有游戏和 SMAPI 时可指定：
 
