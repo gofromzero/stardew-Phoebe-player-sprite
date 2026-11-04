@@ -7,7 +7,7 @@ namespace PhoebeFarmer;
 internal static class SpriteSheet
 {
     // Generated source art is normalized once, not scaled or scanned during drawing.
-    public static Texture2D Prepare(Texture2D source, int cols, int rows, string name, int[][] bounds)
+    public static Texture2D Prepare(Texture2D source, int cols, int rows, string name, int[][] bounds, string variant)
     {
         if (source.Width < cols * 8 || source.Height < rows * 8)
             throw new InvalidOperationException("Sprite sheet is too small.");
@@ -42,7 +42,7 @@ internal static class SpriteSheet
                         referenceWidth = Math.Max(referenceWidth, other[2]);
                         referenceHeight = Math.Max(referenceHeight, other[3]);
                     }
-                var fit = FrameGeometry.Fit(w, h, FrameGeometry.Height(name, row, col), referenceWidth, referenceHeight);
+                var fit = FrameGeometry.Fit(w, h, FrameGeometry.Height(name, row, col, variant), referenceWidth, referenceHeight);
                 for (int y = 0; y < fit.Height; y++)
                     for (int x = 0; x < fit.Width; x++)
                     {

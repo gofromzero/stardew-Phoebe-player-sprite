@@ -14,7 +14,7 @@ const v=document.querySelector('#variant'),s=document.querySelector('#sheet'),st
 let frames=[],cols=4,rows=4,playing=true,serial=0;
 function resizeDisplay(){const dpr=window.devicePixelRatio||1;canvas.width=Math.round(480*dpr);canvas.height=Math.round(680*dpr);ctx.setTransform(canvas.width/480,0,0,canvas.height/680,0,0);ctx.imageSmoothingEnabled=false}
 resizeDisplay();window.addEventListener('resize',resizeDisplay);
-function height(name,r,c){return name==='crouch'&&c<2||name==='tools'&&c===2?23:name==='misc'&&r===0?(c===3?12:22):28}
+function height(name,r,c){const extra=v.value==='classic'?4:0;return name==='crouch'&&c<2||name==='tools'&&c===2?23+extra:name==='misc'&&r===0?(c===3?12:22+extra):28+extra}
 async function load(){const ticket=++serial;last=0;frames=[];if(v.value==='off'){status.textContent='外观已关闭：游戏中恢复原版农夫（此预览不含原版素材）';return}status.textContent='加载中…';try{
 const name=s.value,image=new Image();image.src=`PhoebeFarmer/assets/${v.value}/${name}.png`;const response=await fetch(`PhoebeFarmer/assets/${v.value}/frames.json`);if(!response.ok)throw Error('缺少帧位置文件');const bounds=(await response.json())[name];await image.decode();if(ticket!==serial)return;[cols,rows]=layouts[name];
 const off=document.createElement('canvas');off.width=image.width;off.height=image.height;const oc=off.getContext('2d',{willReadFrequently:true});oc.drawImage(image,0,0);const p=oc.getImageData(0,0,off.width,off.height).data;

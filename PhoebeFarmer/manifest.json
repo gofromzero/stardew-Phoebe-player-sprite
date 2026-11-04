@@ -1,7 +1,7 @@
 {
   "Name": "Phoebe Farmer - ARE & Classic",
   "Author": "gofromzero (AI-assisted), based on Darian's Whale Farmer",
-  "Version": "0.1.4",
+  "Version": "0.1.5",
   "Description": "菲比双形态玩家外观：F9 循环切换套装 1 ARE、套装 2 经典、关闭外观。",
   "UniqueID": "gofromzero.PhoebeFarmer",
   "EntryDll": "PhoebeFarmer.dll",

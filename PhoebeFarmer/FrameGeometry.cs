@@ -24,11 +24,12 @@ internal static class FrameGeometry
     public static (bool Enabled, string Variant) NextAppearance(bool enabled, string variant) =>
         !enabled ? (true, "are") : variant == "are" ? (true, "classic") : (false, "classic");
 
-    public static int Height(string sheet, int row, int col)
+    public static int Height(string sheet, int row, int col, string variant = "are")
     {
-        if (sheet == "crouch" && col < 2) return 23;
-        if (sheet == "misc" && row == 0) return col == 3 ? 12 : 22;
-        if (sheet == "tools" && col == 2) return 23;
-        return 28;
+        int extra = variant == "classic" ? 4 : 0;
+        if (sheet == "crouch" && col < 2) return 23 + extra;
+        if (sheet == "misc" && row == 0) return col == 3 ? 12 : 22 + extra;
+        if (sheet == "tools" && col == 2) return 23 + extra;
+        return 28 + extra;
     }
 }

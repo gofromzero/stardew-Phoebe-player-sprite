@@ -46,3 +46,7 @@ Check(smallStep.Y + smallStep.Height == 40 && tallStep.Y + tallStep.Height == 40
 Check(FrameGeometry.NormalizeVariant("dumpling") == "classic", "Existing outfit 2 configs migrate to classic");
 Check(FrameGeometry.NormalizeVariant("CLASSIC") == "classic", "Classic config is case insensitive");
 Check(FrameGeometry.NormalizeVariant("unknown") == "are", "Unknown config falls back to outfit 1");
+
+Check(FrameGeometry.Height("walk",0,0,"classic")==32, "Classic gets 32 pixels for clearer face and trim");
+Check(FrameGeometry.Height("walk",0,0,"are")==28, "ARE size stays unchanged");
+Check(FrameGeometry.Height("misc",0,3,"classic")==12, "Lying pose remains horizontal");

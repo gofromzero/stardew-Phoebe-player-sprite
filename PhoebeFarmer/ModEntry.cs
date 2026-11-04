@@ -51,7 +51,7 @@ namespace PhoebeFarmer
                     {
                         var source = helper.ModContent.Load<Texture2D>(path);
                         string name = Path.GetFileNameWithoutExtension(layout.File);
-                        loaded[sheet] = SpriteSheet.Prepare(source, layout.Cols, layout.Rows, name, bounds[name]);
+                        loaded[sheet] = SpriteSheet.Prepare(source, layout.Cols, layout.Rows, name, bounds[name], variant);
                     }
                     catch (Exception ex)
                     {
