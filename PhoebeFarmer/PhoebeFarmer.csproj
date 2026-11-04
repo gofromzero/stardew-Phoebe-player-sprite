@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>PhoebeFarmer</AssemblyName>
+    <RootNamespace>PhoebeFarmer</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <GamePath Condition="'$(GamePath)' == ''">$(MSBuildProjectDirectory)/../.build/game-refs</GamePath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="$(GamePath)/*.dll" Private="false" />
+    <Reference Include="$(GamePath)/smapi-internal/*.dll" Private="false" />
+    <None Update="manifest.json;config.json;assets/**/*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

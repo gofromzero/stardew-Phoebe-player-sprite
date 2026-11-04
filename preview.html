@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><title>菲比双款 · 贴图预览</title>
+<style>body{font:16px system-ui;background:#faf4e8;color:#352b3a;max-width:950px;margin:24px auto;padding:0 20px}select,button{font:inherit;padding:8px;margin:6px}canvas{image-rendering:pixelated;background:#b4c9a1;width:480px;height:680px;border:1px solid #6b785e}p{line-height:1.7}a{color:#34558b}</style>
+<h1>菲比双款 · 贴图预览</h1><p>按模组相同的取样方式预览 40×40 帧。此页面不是游戏截图，不包含游戏工具、特效或渲染补丁。</p>
+<label>款式 <select id="variant"><option value="are">03 ARE</option><option value="dumpling">01 团团</option></select></label>
+<label>动作 <select id="sheet"><option value="walk">走路</option><option value="tools">挥重工具</option><option value="melee">挥武器</option><option value="crouch">蹲下 / 浇水</option><option value="fishing">钓鱼</option><option value="eat">吃喝</option><option value="misc">坐姿 / 表情</option></select></label>
+<label>方向 <select id="direction"><option value="0">正面</option><option value="1">右侧</option><option value="2">背面</option><option value="3">左侧</option></select></label>
+<button id="play">暂停</button><p id="status" role="status">加载中…</p><div style="overflow-x:auto"><canvas id="view" width="480" height="680" aria-label="动画与所有源帧"></canvas></div>
+<p>F8 切换两款；上方为所选方向的 6 倍整数放大，下方为全部帧的 2 倍整数放大。<a href="README.md">安装说明</a></p>
+<script>
+const layouts={walk:[4,4],tools:[4,3],melee:[4,3],crouch:[4,3],fishing:[3,3],eat:[6,1],misc:[4,2]};
+const palette=[0x302438,0x514052,0x796475,0xA999AB,0xD3C7DA,0xF8F2F4,0x937247,0xBF9864,0xDFBA80,0xF0D29D,0xF9E5BD,0xCE967E,0xE9BCA2,0xFFE1CA,0xF49DA6,0xBC657F,0x283B72,0x3655A0,0x547DD0,0x89A6E4,0x5D367F,0x925DB1,0xC391D4,0xE3C0EE,0x9C742C,0xCFA54D,0xF0D37B,0xE8E6EF].map(c=>[c>>16,c>>8&255,c&255]);
+const v=document.querySelector('#variant'),s=document.querySelector('#sheet'),status=document.querySelector('#status'),canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d');
+let frames=[],cols=4,rows=4,playing=true,serial=0;
+function height(name,r,c){return name==='crouch'&&c<2||name==='tools'&&c===2?23:name==='misc'&&r===0?(c===3?12:22):28}
+async function load(){const ticket=++serial;frames=[];status.textContent='加载中…';try{
+const name=s.value,image=new Image();image.src=`PhoebeFarmer/assets/${v.value}/${name}.png`;const response=await fetch(`PhoebeFarmer/assets/${v.value}/frames.json`);if(!response.ok)throw Error('缺少帧位置文件');const bounds=(await response.json())[name];await image.decode();if(ticket!==serial)return;[cols,rows]=layouts[name];
+const off=document.createElement('canvas');off.width=image.width;off.height=image.height;const oc=off.getContext('2d',{willReadFrequently:true});oc.drawImage(image,0,0);const p=oc.getImageData(0,0,off.width,off.height).data;
+for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+if(!bounds||bounds.length!==rows*cols)throw Error('帧位置数量不正确');const [l,t,w,h]=bounds[r*cols+c],rr=l+w-1,b=t+h-1,scale=Math.min(height(name,r,c)/h,36/w),dw=Math.max(1,Math.round(w*scale)),dh=Math.max(1,Math.round(h*scale)),dx=Math.floor((40-dw)/2),dy=40-dh;
+const f=document.createElement('canvas');f.width=f.height=40;const fc=f.getContext('2d'),data=fc.createImageData(40,40);
+for(let y=0;y<dh;y++)for(let x=0;x<dw;x++){
+const sx=l+Math.floor(x*w/dw),sy=t+Math.floor(y*h/dh),ex=Math.min(rr+1,Math.max(sx+1,l+Math.floor((x+1)*w/dw))),ey=Math.min(b+1,Math.max(sy+1,t+Math.floor((y+1)*h/dh)));let n=0;const votes=palette.map(()=>0);
+for(let yy=0;yy<4;yy++)for(let xx=0;xx<4;xx++){const i=((sy+Math.floor((2*yy+1)*(ey-sy)/8))*off.width+sx+Math.floor((2*xx+1)*(ex-sx)/8))*4;if(p[i+3]<200)continue;let nearest=0,dist=Infinity;palette.forEach((rgb,k)=>{const d=(p[i]-rgb[0])**2+(p[i+1]-rgb[1])**2+(p[i+2]-rgb[2])**2;if(d<dist){dist=d;nearest=k}});votes[nearest]++;n++}
+if(n<8)continue;let winner=0;votes.forEach((n,k)=>{if(n>votes[winner])winner=k});data.data.set([...palette[winner],255],((dy+y)*40+dx+x)*4);
+}fc.putImageData(data,0,0);frames.push(f);
+}status.textContent=`${v.options[v.selectedIndex].text} · ${rows} 行 × ${cols} 帧 · 已载入`;
+}catch(e){status.textContent='无法载入贴图：'+e.message+'。请通过本地 HTTP 服务打开此页面。'}}
+let last=0;function draw(time){if(playing)last=time;ctx.clearRect(0,0,480,680);ctx.imageSmoothingEnabled=false;const r=Math.min(rows-1,Number(document.querySelector('#direction').value)),f=frames[r*cols+Math.floor(last/180)%cols];if(f)ctx.drawImage(f,120,10,240,240);frames.forEach((f,i)=>ctx.drawImage(f,40+i%4*100,290+Math.floor(i/4)*90,80,80));requestAnimationFrame(draw)}
+v.onchange=s.onchange=load;document.querySelector('#play').onclick=e=>{playing=!playing;e.target.textContent=playing?'暂停':'播放'};window.addEventListener('keydown',e=>{if(e.key==='F8'){e.preventDefault();v.value=v.value==='are'?'dumpling':'are';load()}});load();requestAnimationFrame(draw);
+</script></html>
