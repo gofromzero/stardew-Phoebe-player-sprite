@@ -4,8 +4,8 @@ namespace PhoebeFarmer;
 
 internal static class PixelSampler
 {
-    // One palette keeps the generated sheets consistent when reduced to game pixels.
-    private static readonly int[] Palette = {
+    // Keep each outfit consistent when reducing its sheets to game pixels.
+    private static readonly int[] DefaultPalette = {
         0x302438, 0x514052, 0x796475, 0xA999AB, 0xD3C7DA, 0xF8F2F4,
         0x937247, 0xBF9864, 0xDFBA80, 0xF0D29D, 0xF9E5BD,
         0xCE967E, 0xE9BCA2, 0xFFE1CA, 0xF49DA6, 0xBC657F,
@@ -14,9 +14,12 @@ internal static class PixelSampler
         0x9C742C, 0xCFA54D, 0xF0D37B, 0xE8E6EF
     };
 
-    public static uint Sample(uint[] pixels, int stride, int x0, int y0, int x1, int y1)
+    private static readonly int[] ClassicPalette = { 0x665548,0x8B7662,0xF0D5A0,0xC6A575,0xFAE5BB,0xF5EFE4,0xD6CBB9,0xC8AC77,0x79678B,0x8E73AD,0xB7A0CC,0xF6DFCA,0xD6B5A0,0x514A49,0x617994,0x91A4B8,0xD79F9A };
+
+    public static uint Sample(uint[] pixels, int stride, int x0, int y0, int x1, int y1, bool classic = false)
     {
-        Span<int> votes = stackalloc int[Palette.Length];
+        var palette = classic ? ClassicPalette : DefaultPalette;
+        Span<int> votes = stackalloc int[palette.Length];
         votes.Clear();
         int count = 0;
         for (int yy = 0; yy < 4; yy++)
@@ -31,9 +34,9 @@ internal static class PixelSampler
                 int g = (int)Math.Min(255, ((p >> 8) & 255) * 255 / alpha);
                 int b = (int)Math.Min(255, ((p >> 16) & 255) * 255 / alpha);
                 int nearest = 0, distance = int.MaxValue;
-                for (int i = 0; i < Palette.Length; i++)
+                for (int i = 0; i < palette.Length; i++)
                 {
-                    int color = Palette[i];
+                    int color = palette[i];
                     int dr = r - (color >> 16), dg = g - ((color >> 8) & 255), db = b - (color & 255);
                     int d = dr * dr + dg * dg + db * db;
                     if (d < distance) { distance = d; nearest = i; }
@@ -44,7 +47,7 @@ internal static class PixelSampler
         if (count < 8) return 0;
         int winner = 0;
         for (int i = 1; i < votes.Length; i++) if (votes[i] > votes[winner]) winner = i;
-        int best = Palette[winner];
+        int best = palette[winner];
         return 0xFF000000u | (uint)(best >> 16) | (uint)(best & 0xFF00) | (uint)((best & 255) << 16);
     }
 }

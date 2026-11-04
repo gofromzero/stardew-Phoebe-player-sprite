@@ -50,3 +50,11 @@ Check(FrameGeometry.NormalizeVariant("unknown") == "are", "Unknown config falls 
 Check(FrameGeometry.Height("walk",0,0,"classic")==32, "Classic gets 32 pixels for clearer face and trim");
 Check(FrameGeometry.Height("walk",0,0,"are")==28, "ARE size stays unchanged");
 Check(FrameGeometry.Height("misc",0,3,"classic")==12, "Lying pose remains horizontal");
+
+uint creamHair = 0xFFA0D5F0;
+Check(PixelSampler.Sample(new[]{creamHair},1,0,0,1,1,true)==creamHair,"Classic cream blonde remains cream blonde");
+uint taupeOutline = 0xFF485566;
+Check(PixelSampler.Sample(new[]{taupeOutline},1,0,0,1,1,true)==taupeOutline,"Classic outline keeps warm brown rather than black");
+
+uint mutedViolet = 0xFF8B6779;
+Check(PixelSampler.Sample(new[]{mutedViolet},1,0,0,1,1,true)==mutedViolet,"Muted violet eyes must not map to dusty blue");

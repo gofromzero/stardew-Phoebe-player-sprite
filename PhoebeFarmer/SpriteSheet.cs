@@ -49,7 +49,7 @@ internal static class SpriteSheet
                         int sx = left + x * w / fit.Width, sy = top + y * h / fit.Height;
                         int ex = Math.Min(right + 1, Math.Max(sx + 1, left + (x + 1) * w / fit.Width));
                         int ey = Math.Min(bottom + 1, Math.Max(sy + 1, top + (y + 1) * h / fit.Height));
-                        var p = new Color { PackedValue = PixelSampler.Sample(packed, source.Width, sx, sy, ex, ey) };
+                        var p = new Color { PackedValue = PixelSampler.Sample(packed, source.Width, sx, sy, ex, ey, variant == "classic") };
                         output[(row * cell + fit.Y + y) * outputWidth + col * cell + fit.X + x] = p;
                     }
             }
