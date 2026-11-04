@@ -51,10 +51,15 @@ Check(FrameGeometry.Height("walk",0,0,"classic")==32, "Classic gets 32 pixels fo
 Check(FrameGeometry.Height("walk",0,0,"are")==28, "ARE size stays unchanged");
 Check(FrameGeometry.Height("misc",0,3,"classic")==12, "Lying pose remains horizontal");
 
-uint creamHair = 0xFFA0D5F0;
-Check(PixelSampler.Sample(new[]{creamHair},1,0,0,1,1,true)==creamHair,"Classic cream blonde remains cream blonde");
-uint taupeOutline = 0xFF485566;
-Check(PixelSampler.Sample(new[]{taupeOutline},1,0,0,1,1,true)==taupeOutline,"Classic outline keeps warm brown rather than black");
+uint creamHair = 0xFF87CFE4;
+Check(PixelSampler.Sample(new[]{creamHair},1,0,0,1,1,true)==creamHair,"Official light golden blonde is preserved");
+uint taupeOutline = 0xFF4B4041;
+Check(PixelSampler.Sample(new[]{taupeOutline},1,0,0,1,1,true)==taupeOutline,"Official neutral outline is preserved");
 
-uint mutedViolet = 0xFF8B6779;
-Check(PixelSampler.Sample(new[]{mutedViolet},1,0,0,1,1,true)==mutedViolet,"Muted violet eyes must not map to dusty blue");
+uint mutedViolet = 0xFFC6708F;
+Check(PixelSampler.Sample(new[]{mutedViolet},1,0,0,1,1,true)==mutedViolet,"Official violet eyes must not map to cobalt blue");
+
+uint cobalt = 0xFFD55531;
+Check(PixelSampler.Sample(new[]{cobalt},1,0,0,1,1,true)==cobalt,"Official cobalt accents remain blue");
+uint pearlWhite = 0xFFF7F0F1;
+Check(PixelSampler.Sample(new[]{pearlWhite},1,0,0,1,1,true)==pearlWhite,"Official cool whites must not become beige");

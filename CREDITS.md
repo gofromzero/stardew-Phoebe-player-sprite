@@ -20,3 +20,5 @@
 Source code: MIT, with the upstream notice retained. Character artwork: personal,
 non-commercial fan use only; underlying character and third-party design rights
 remain with their owners. Public source availability does not imply official endorsement.
+
+- Classic color authority: [KURO official Phoebe character article](https://wutheringwaves.kurogames.com/en/main/news/detail/2101), especially its official Story character artwork. Official source image is used locally as reference and is not bundled in the mod.
