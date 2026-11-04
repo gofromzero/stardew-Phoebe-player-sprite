@@ -31,7 +31,18 @@ internal static class SpriteSheet
                     throw new InvalidOperationException($"Invalid frame bounds: {name} {row},{col}.");
                 int left = box[0], top = box[1], w = box[2], h = box[3];
                 int right = left + w - 1, bottom = top + h - 1;
-                var fit = FrameGeometry.Fit(w, h, FrameGeometry.Height(name, row, col));
+                int referenceWidth = w, referenceHeight = h;
+                // Keep walk frames at one scale so the head does not resize on each step.
+                if (name == "walk")
+                    for (int c = 0; c < cols; c++)
+                    {
+                        var other = bounds[row * cols + c];
+                        if (other == null || other.Length != 4)
+                            throw new InvalidOperationException("Invalid walk frame bounds.");
+                        referenceWidth = Math.Max(referenceWidth, other[2]);
+                        referenceHeight = Math.Max(referenceHeight, other[3]);
+                    }
+                var fit = FrameGeometry.Fit(w, h, FrameGeometry.Height(name, row, col), referenceWidth, referenceHeight);
                 for (int y = 0; y < fit.Height; y++)
                     for (int x = 0; x < fit.Width; x++)
                     {

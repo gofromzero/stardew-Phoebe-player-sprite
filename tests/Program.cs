@@ -36,3 +36,9 @@ Check(PixelSampler.Sample(new uint[] { 0xFFFFFFFF, 0, 0, 0 }, 2, 0, 0, 2, 2) == 
 Console.WriteLine("Pixel sampling checks passed.");
 uint split = PixelSampler.Sample(new uint[] { 0xFF382430, 0xFF382430, 0xFFF4F2F8, 0xFFF4F2F8 }, 2, 0, 0, 2, 2);
 Check((split & 255) < 100 || (split & 255) > 220, "A hard light/dark edge must not become an averaged grey");
+
+var smallStep = FrameGeometry.Fit(200, 280, 28, 240, 300);
+var tallStep = FrameGeometry.Fit(200, 300, 28, 240, 300);
+Check(smallStep.Width == tallStep.Width, "Walking must preserve width when only frame height changes");
+Check(smallStep.Height < tallStep.Height, "Shorter walk frame must not be stretched to full height");
+Check(smallStep.Y + smallStep.Height == 40 && tallStep.Y + tallStep.Height == 40, "Shared scale keeps feet anchored");

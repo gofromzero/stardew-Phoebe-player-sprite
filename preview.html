@@ -12,12 +12,14 @@ const layouts={walk:[4,4],tools:[4,3],melee:[4,3],crouch:[4,3],fishing:[3,3],eat
 const palette=[0x302438,0x514052,0x796475,0xA999AB,0xD3C7DA,0xF8F2F4,0x937247,0xBF9864,0xDFBA80,0xF0D29D,0xF9E5BD,0xCE967E,0xE9BCA2,0xFFE1CA,0xF49DA6,0xBC657F,0x283B72,0x3655A0,0x547DD0,0x89A6E4,0x5D367F,0x925DB1,0xC391D4,0xE3C0EE,0x9C742C,0xCFA54D,0xF0D37B,0xE8E6EF].map(c=>[c>>16,c>>8&255,c&255]);
 const v=document.querySelector('#variant'),s=document.querySelector('#sheet'),status=document.querySelector('#status'),canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d');
 let frames=[],cols=4,rows=4,playing=true,serial=0;
+function resizeDisplay(){const dpr=window.devicePixelRatio||1;canvas.width=Math.round(480*dpr);canvas.height=Math.round(680*dpr);ctx.setTransform(canvas.width/480,0,0,canvas.height/680,0,0);ctx.imageSmoothingEnabled=false}
+resizeDisplay();window.addEventListener('resize',resizeDisplay);
 function height(name,r,c){return name==='crouch'&&c<2||name==='tools'&&c===2?23:name==='misc'&&r===0?(c===3?12:22):28}
 async function load(){const ticket=++serial;frames=[];if(v.value==='off'){status.textContent='外观已关闭：游戏中恢复原版农夫（此预览不含原版素材）';return}status.textContent='加载中…';try{
 const name=s.value,image=new Image();image.src=`PhoebeFarmer/assets/${v.value}/${name}.png`;const response=await fetch(`PhoebeFarmer/assets/${v.value}/frames.json`);if(!response.ok)throw Error('缺少帧位置文件');const bounds=(await response.json())[name];await image.decode();if(ticket!==serial)return;[cols,rows]=layouts[name];
 const off=document.createElement('canvas');off.width=image.width;off.height=image.height;const oc=off.getContext('2d',{willReadFrequently:true});oc.drawImage(image,0,0);const p=oc.getImageData(0,0,off.width,off.height).data;
 for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
-if(!bounds||bounds.length!==rows*cols)throw Error('帧位置数量不正确');const [l,t,w,h]=bounds[r*cols+c],rr=l+w-1,b=t+h-1,scale=Math.min(height(name,r,c)/h,36/w),dw=Math.max(1,Math.round(w*scale)),dh=Math.max(1,Math.round(h*scale)),dx=Math.floor((40-dw)/2),dy=40-dh;
+if(!bounds||bounds.length!==rows*cols)throw Error('帧位置数量不正确');const [l,t,w,h]=bounds[r*cols+c],rr=l+w-1,b=t+h-1,reference=name==='walk'?bounds.slice(r*cols,(r+1)*cols):[[l,t,w,h]],scale=Math.min(height(name,r,c)/Math.max(...reference.map(b=>b[3])),36/Math.max(...reference.map(b=>b[2]))),dw=Math.max(1,Math.round(w*scale)),dh=Math.max(1,Math.round(h*scale)),dx=Math.floor((40-dw)/2),dy=40-dh;
 const f=document.createElement('canvas');f.width=f.height=40;const fc=f.getContext('2d'),data=fc.createImageData(40,40);
 for(let y=0;y<dh;y++)for(let x=0;x<dw;x++){
 const sx=l+Math.floor(x*w/dw),sy=t+Math.floor(y*h/dh),ex=Math.min(rr+1,Math.max(sx+1,l+Math.floor((x+1)*w/dw))),ey=Math.min(b+1,Math.max(sy+1,t+Math.floor((y+1)*h/dh)));let n=0;const votes=palette.map(()=>0);

@@ -7,11 +7,11 @@ internal static class FrameGeometry
 {
     public const int Cell = 40;
 
-    public static (int X, int Y, int Width, int Height) Fit(int width, int height, int targetHeight)
+    public static (int X, int Y, int Width, int Height) Fit(int width, int height, int targetHeight, int referenceWidth = 0, int referenceHeight = 0)
     {
         if (width <= 0 || height <= 0 || targetHeight <= 0)
             throw new ArgumentOutOfRangeException(nameof(width), "Frame bounds must be positive.");
-        double scale = Math.Min((double)targetHeight / height, 36d / width);
+        double scale = Math.Min((double)targetHeight / Math.Max(height, referenceHeight), 36d / Math.Max(width, referenceWidth));
         int w = Math.Max(1, (int)Math.Round(width * scale, MidpointRounding.AwayFromZero));
         int h = Math.Max(1, (int)Math.Round(height * scale, MidpointRounding.AwayFromZero));
         return ((Cell - w) / 2, Cell - h, w, h);
