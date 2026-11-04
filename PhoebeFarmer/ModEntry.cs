@@ -209,9 +209,23 @@ namespace PhoebeFarmer
 
             // 原版身体是 16x32；我们的格子水平居中、脚底对齐到同一位置
             var ourOrigin = origin + new Vector2((w - 16) / 2f, h - 32);
-            b.Draw(texture, position + origin + offset, src, overrideColor, rotation, ourOrigin, 4f * scale,
-                pose.Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-                FarmerRenderer.GetLayerDepth(layerDepth, FarmerRenderer.FarmerSpriteLayers.Base));
+            var effects = pose.Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            float depth = FarmerRenderer.GetLayerDepth(layerDepth, FarmerRenderer.FarmerSpriteLayers.Base);
+            if (pose.Sheet == Sheet.Walk)
+            {
+                // Reuse the neutral upper body; only the bottom six pixels animate while walking.
+                int upperHeight = Math.Min(34, src.Height);
+                var upper = new Rectangle(0, src.Y, w, upperHeight);
+                b.Draw(texture, position + origin + offset, upper, overrideColor, rotation, ourOrigin, 4f * scale, effects, depth);
+                if (src.Height > upperHeight)
+                {
+                    var feet = new Rectangle(src.X, src.Y + upperHeight, w, src.Height - upperHeight);
+                    b.Draw(texture, position + origin + offset, feet, overrideColor, rotation,
+                        ourOrigin - new Vector2(0, upperHeight), 4f * scale, effects, depth);
+                }
+            }
+            else
+                b.Draw(texture, position + origin + offset, src, overrideColor, rotation, ourOrigin, 4f * scale, effects, depth);
         }
 
         /// <summary>走路/站立：走路表有单独的朝左一行，不用镜像。</summary>

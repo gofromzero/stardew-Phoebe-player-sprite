@@ -5,7 +5,7 @@
 <label>款式 <select id="variant"><option value="are">套装 1 · ARE</option><option value="dumpling">套装 2 · 团团</option><option value="off">关闭</option></select></label>
 <label>动作 <select id="sheet"><option value="walk">走路</option><option value="tools">挥重工具</option><option value="melee">挥武器</option><option value="crouch">蹲下 / 浇水</option><option value="fishing">钓鱼</option><option value="eat">吃喝</option><option value="misc">坐姿 / 表情</option></select></label>
 <label>方向 <select id="direction"><option value="0">正面</option><option value="1">右侧</option><option value="2">背面</option><option value="3">左侧</option></select></label>
-<button id="play">暂停</button><p id="status" role="status">加载中…</p><div style="overflow-x:auto"><canvas id="view" width="480" height="680" aria-label="动画与所有源帧"></canvas></div>
+<button id="play">暂停</button><button id="step">下一帧</button><p id="status" role="status">加载中…</p><div style="overflow-x:auto"><canvas id="view" width="480" height="680" aria-label="动画与所有源帧"></canvas></div>
 <p>F9 循环：套装 1 → 套装 2 → 关闭；上方为所选方向的 6 倍整数放大，下方为全部帧的 2 倍整数放大。<a href="README.md">安装说明</a></p>
 <script>
 const layouts={walk:[4,4],tools:[4,3],melee:[4,3],crouch:[4,3],fishing:[3,3],eat:[6,1],misc:[4,2]};
@@ -15,7 +15,7 @@ let frames=[],cols=4,rows=4,playing=true,serial=0;
 function resizeDisplay(){const dpr=window.devicePixelRatio||1;canvas.width=Math.round(480*dpr);canvas.height=Math.round(680*dpr);ctx.setTransform(canvas.width/480,0,0,canvas.height/680,0,0);ctx.imageSmoothingEnabled=false}
 resizeDisplay();window.addEventListener('resize',resizeDisplay);
 function height(name,r,c){return name==='crouch'&&c<2||name==='tools'&&c===2?23:name==='misc'&&r===0?(c===3?12:22):28}
-async function load(){const ticket=++serial;frames=[];if(v.value==='off'){status.textContent='外观已关闭：游戏中恢复原版农夫（此预览不含原版素材）';return}status.textContent='加载中…';try{
+async function load(){const ticket=++serial;last=0;frames=[];if(v.value==='off'){status.textContent='外观已关闭：游戏中恢复原版农夫（此预览不含原版素材）';return}status.textContent='加载中…';try{
 const name=s.value,image=new Image();image.src=`PhoebeFarmer/assets/${v.value}/${name}.png`;const response=await fetch(`PhoebeFarmer/assets/${v.value}/frames.json`);if(!response.ok)throw Error('缺少帧位置文件');const bounds=(await response.json())[name];await image.decode();if(ticket!==serial)return;[cols,rows]=layouts[name];
 const off=document.createElement('canvas');off.width=image.width;off.height=image.height;const oc=off.getContext('2d',{willReadFrequently:true});oc.drawImage(image,0,0);const p=oc.getImageData(0,0,off.width,off.height).data;
 for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
@@ -28,6 +28,7 @@ if(n<8)continue;let winner=0;votes.forEach((n,k)=>{if(n>votes[winner])winner=k})
 }fc.putImageData(data,0,0);frames.push(f);
 }status.textContent=`${v.options[v.selectedIndex].text} · ${rows} 行 × ${cols} 帧 · 已载入`;
 }catch(e){status.textContent='无法载入贴图：'+e.message+'。请通过本地 HTTP 服务打开此页面。'}}
-let last=0;function draw(time){if(playing)last=time;ctx.clearRect(0,0,480,680);ctx.imageSmoothingEnabled=false;const r=Math.min(rows-1,Number(document.querySelector('#direction').value)),f=frames[r*cols+Math.floor(last/180)%cols];if(f)ctx.drawImage(f,120,10,240,240);frames.forEach((f,i)=>ctx.drawImage(f,40+i%4*100,290+Math.floor(i/4)*90,80,80));requestAnimationFrame(draw)}
-v.onchange=s.onchange=load;document.querySelector('#play').onclick=e=>{playing=!playing;e.target.textContent=playing?'暂停':'播放'};window.addEventListener('keydown',e=>{if(e.key==='F9'){e.preventDefault();if(e.repeat)return;v.value=v.value==='are'?'dumpling':v.value==='dumpling'?'off':'are';load()}});load();requestAnimationFrame(draw);
+function drawFrame(i,x,y,size){const frame=frames[i];if(!frame)return;const unit=size/40;if(s.value==='walk'){ctx.drawImage(frames[Math.floor(i/cols)*cols],0,0,40,34,x,y,size,34*unit);ctx.drawImage(frame,0,34,40,6,x,y+34*unit,size,6*unit)}else ctx.drawImage(frame,x,y,size,size)}
+let last=0,previousTime=0;function draw(time){if(playing)last+=previousTime?Math.min(time-previousTime,100):0;previousTime=time;ctx.clearRect(0,0,480,680);ctx.imageSmoothingEnabled=false;const r=Math.min(rows-1,Number(document.querySelector('#direction').value)),f=frames[r*cols+Math.floor(last/180)%cols];if(f)drawFrame(r*cols+Math.floor(last/180)%cols,120,10,240);frames.forEach((f,i)=>drawFrame(i,40+i%4*100,290+Math.floor(i/4)*90,80));requestAnimationFrame(draw)}
+v.onchange=s.onchange=load;document.querySelector('#play').onclick=e=>{playing=!playing;e.target.textContent=playing?'暂停':'播放'};document.querySelector('#step').onclick=()=>{playing=false;document.querySelector('#play').textContent='播放';last=(Math.floor(last/180)+1)*180};window.addEventListener('keydown',e=>{if(e.key==='F9'){e.preventDefault();if(e.repeat)return;v.value=v.value==='are'?'dumpling':v.value==='dumpling'?'off':'are';load()}});load();requestAnimationFrame(draw);
 </script></html>
