@@ -17,7 +17,8 @@ internal static class FrameGeometry
         return ((Cell - w) / 2, Cell - h, w, h);
     }
 
-    public static string NextVariant(string current) => current == "are" ? "dumpling" : "are";
+    public static (bool Enabled, string Variant) NextAppearance(bool enabled, string variant) =>
+        !enabled ? (true, "are") : variant == "are" ? (true, "dumpling") : (false, "dumpling");
 
     public static int Height(string sheet, int row, int col)
     {

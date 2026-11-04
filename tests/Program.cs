@@ -14,8 +14,14 @@ foreach (int h in new[] { 1, 20, 50, 1000 })
     Check(f.Y + f.Height == 40, "Feet remain anchored");
     Check(f.X >= 0 && f.X + f.Width <= 40, "No horizontal clipping");
 }
-Check(FrameGeometry.NextVariant("are") == "dumpling", "ARE switches to dumpling");
-Check(FrameGeometry.NextVariant(FrameGeometry.NextVariant("are")) == "are", "Cycle returns to ARE");
+var state = (Enabled: true, Variant: "are");
+state = FrameGeometry.NextAppearance(state.Enabled, state.Variant);
+Check(state == (true, "dumpling"), "Outfit 1 advances to outfit 2");
+state = FrameGeometry.NextAppearance(state.Enabled, state.Variant);
+Check(state == (false, "dumpling"), "Outfit 2 advances to off");
+state = FrameGeometry.NextAppearance(state.Enabled, state.Variant);
+Check(state == (true, "are"), "Off returns to outfit 1");
+Check(FrameGeometry.NextAppearance(false, "are") == (true, "are"), "Legacy disabled config starts at outfit 1");
 Check(FrameGeometry.Height("crouch", 0, 0) < FrameGeometry.Height("walk", 0, 0), "Crouch stays shorter");
 Check(FrameGeometry.Height("misc", 0, 3) == 12, "Lying pose height");
 try { FrameGeometry.Fit(0, 10, 30); throw new Exception("Empty frame accepted"); }

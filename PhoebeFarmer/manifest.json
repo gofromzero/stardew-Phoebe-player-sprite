@@ -1,8 +1,8 @@
 {
   "Name": "Phoebe Farmer - ARE & Dumpling",
   "Author": "gofromzero (AI-assisted), based on Darian's Whale Farmer",
-  "Version": "0.1.0",
-  "Description": "菲比双形态玩家外观：F8 切换 ARE / 团团，F9 开关外观。",
+  "Version": "0.1.1",
+  "Description": "菲比双形态玩家外观：F9 循环切换套装 1 ARE、套装 2 团团、关闭外观。",
   "UniqueID": "gofromzero.PhoebeFarmer",
   "EntryDll": "PhoebeFarmer.dll",
   "MinimumApiVersion": "4.4.0",

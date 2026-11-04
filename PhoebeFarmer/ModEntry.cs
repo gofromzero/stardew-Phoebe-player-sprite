@@ -106,7 +106,7 @@ namespace PhoebeFarmer
                 foreach (var (sheet, layout) in SheetLayout)
                     if (!variant.Value.ContainsKey(sheet))
                         missing.Add(layout.File);
-                Monitor.Log($"菲比 {variant.Key} 已加载，按 {config.SwitchKey} 换款、{config.ToggleKey} 开关。"
+                Monitor.Log($"菲比 {variant.Key} 已加载，按 {config.ToggleKey} 循环切换：套装 1 → 套装 2 → 关闭。"
                     + (missing.Count > 0 ? $" 还没有的姿态图（用站立姿势代替）：{string.Join("、", missing)}" : ""), LogLevel.Info);
             }
         }
@@ -114,24 +114,20 @@ namespace PhoebeFarmer
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             if (!Context.IsPlayerFree || Helper.Input.IsSuppressed(e.Button)
-                || (e.Button != config.ToggleKey && e.Button != config.SwitchKey))
+                || e.Button != config.ToggleKey)
                 return;
             Helper.Input.Suppress(e.Button);
-            if (e.Button == config.ToggleKey) config.Enabled = !config.Enabled;
-            else
+            var next = FrameGeometry.NextAppearance(config.Enabled, config.Variant);
+            if (next.Enabled && !variants.ContainsKey(next.Variant))
             {
-                string next = FrameGeometry.NextVariant(config.Variant);
-                if (!variants.ContainsKey(next))
-                {
-                    Game1.addHUDMessage(new HUDMessage("另一款贴图缺失，请检查模组安装。", HUDMessage.error_type));
-                    return;
-                }
-                config.Variant = next;
-                config.Enabled = true;
+                Game1.addHUDMessage(new HUDMessage("目标套装贴图缺失，请检查模组安装。", HUDMessage.error_type));
+                return;
             }
+            config.Enabled = next.Enabled;
+            config.Variant = next.Variant;
             try { Helper.WriteConfig(config); }
             catch (Exception ex) { Monitor.Log("本次切换已生效，但配置保存失败：" + ex.Message, LogLevel.Warn); }
-            string label = config.Variant == "are" ? "03 ARE款" : "01 团团款";
+            string label = config.Variant == "are" ? "套装 1 · ARE" : "套装 2 · 团团";
             Game1.addHUDMessage(new HUDMessage(config.Enabled ? "菲比外观：" + label : "已恢复原版外观", HUDMessage.newQuest_type));
         }
 

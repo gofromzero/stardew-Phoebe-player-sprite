@@ -3,13 +3,13 @@
 将《星露谷物语》的玩家外观替换为菲比，并在 **03 ARE 款**与 **01 团团款**之间切换。
 基于 [Darian 的 Whale Farmer](https://github.com/Darianliu23/stardew-deepseek-whale-maid-player-sprite) 改造。
 
-**0.1.0 是待实机验收的预发布版本。** 使用公开参考程序集编译；开发机器没有安装游戏。
+**0.1.1 是待实机验收的预发布版本。** 使用公开参考程序集编译；开发机器没有安装游戏。
 编译通过不代表已验证实际游戏中的动画、工具对位或模组兼容性。
 
 ## 安装
 
 1. 准备 PC 版 Stardew Valley **1.6.15** 和 **SMAPI 4.4.0 或更新版本**。
-2. 从本仓库 Releases 下载 `PhoebeFarmer-0.1.0.zip`。
+2. 从本仓库 Releases 下载 `PhoebeFarmer-0.1.1.zip`。
 3. 将 ZIP 内的 `PhoebeFarmer` 文件夹解压到游戏的 `Mods` 目录。
    路径应为 `Mods/PhoebeFarmer/manifest.json`，不要再多套一层文件夹。
 4. 通过 SMAPI 启动游戏，进入存档后使用快捷键。
@@ -19,8 +19,8 @@
 
 ## 切换
 
-- **F8**：03 ARE ↔ 01 团团；若外观已关闭，同时重新启用菲比。
-- **F9**：菲比 ↔ 原版农夫。
+- **F9**（沿用原模组开关键）：套装 1 ARE → 套装 2 团团 → 关闭（原版农夫）→ 套装 1。
+- 不再使用 F8；默认启动为套装 1。
 - 选择写入 `config.json`，下次启动保留。打开菜单、对话或过场时不响应快捷键。
 
 `config.json` 默认值：
@@ -29,14 +29,13 @@
 {
   "Enabled": true,
   "Variant": "are",
-  "SwitchKey": "F8",
   "ToggleKey": "F9",
   "WalkFrameMs": 180,
   "OnlyLocalPlayer": true
 }
 ```
 
-`Variant` 可填 `are` 或 `dumpling`。改键后重启游戏；重复键自动恢复为 F8 / F9。
+`Variant` 可填 `are` 或 `dumpling`。通过 `ToggleKey` 改键后重启游戏。旧版 `SwitchKey` 配置会被忽略；原有 `ToggleKey` 自定义键位继续生效。
 只在本机显示替换；默认只替换自己的角色，联机其他人需要自行安装才能看到。
 
 ## 两款预览
@@ -73,7 +72,7 @@
 ./build.ps1
 ```
 
-脚本获取公开的编译专用参考程序集，运行无图形环境的几何/切换检查，编译并输出 `dist/PhoebeFarmer-0.1.0.zip`。
+脚本获取公开的编译专用参考程序集，运行无图形环境的几何/切换检查，编译并输出 `dist/PhoebeFarmer-0.1.1.zip`。
 参考程序集仅用于编译，不可用于运行游戏，也不会打入安装包。
 已有游戏和 SMAPI 时可指定：
 
@@ -95,7 +94,7 @@ python tests/check_assets.py
 ## 验收清单
 
 打包前检查编译、切换循环、40×40 帧边界、透明背景、非空帧和 ZIP 内容。
-仍需在游戏中检查：F8/F9、重启后选择保持、四向走路、工具挥动/浇水/钓鱼/吃喝、菜单头像、骑马和游泳。
+仍需在游戏中检查：F9 三态循环、重启后选择保持、四向走路、工具挥动/浇水/钓鱼/吃喝、菜单头像、骑马和游泳。
 发现问题时请保留 SMAPI 日志、游戏/SMAPI 版本、款式及动作方向。
 
 ## 署名与许可

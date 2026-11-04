@@ -1,7 +1,6 @@
 {
   "Enabled": true,
   "Variant": "are",
-  "SwitchKey": "F8",
   "ToggleKey": "F9",
   "WalkFrameMs": 180,
   "OnlyLocalPlayer": true
